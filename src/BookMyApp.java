@@ -3,7 +3,7 @@ import java.util.LinkedList;
 
 public class BookMyApp {
 
-    // Inner class representing a booking request
+    // Reservation represents a booking request
     static class Reservation {
         String guestName;
         String roomType;
@@ -12,30 +12,35 @@ public class BookMyApp {
             this.guestName = guestName;
             this.roomType = roomType;
         }
+    }
 
-        void displayRequest() {
-            System.out.println("Guest: " + guestName + " | Requested Room: " + roomType);
+    // Queue for booking requests
+    private static Queue<Reservation> bookingQueue = new LinkedList<>();
+
+    // Accept booking request
+    public static void submitBookingRequest(String guestName, String roomType) {
+        bookingQueue.add(new Reservation(guestName, roomType));
+    }
+
+    // Display requests
+    public static void displayBookingRequests() {
+
+        System.out.println("Booking Requests in Arrival Order:\n");
+
+        for (Reservation r : bookingQueue) {
+            System.out.println("Guest: " + r.guestName + " | Requested Room: " + r.roomType);
         }
+
+        System.out.println("\nTotal Requests in Queue: " + bookingQueue.size());
     }
 
     public static void main(String[] args) {
 
-        // Booking Request Queue (FIFO)
-        Queue<Reservation> bookingQueue = new LinkedList<>();
+        submitBookingRequest("Alice", "Single");
+        submitBookingRequest("Bob", "Double");
+        submitBookingRequest("Charlie", "Suite");
+        submitBookingRequest("David", "Single");
 
-        // Guests submit booking requests
-        bookingQueue.add(new Reservation("Alice", "Single"));
-        bookingQueue.add(new Reservation("Bob", "Double"));
-        bookingQueue.add(new Reservation("Charlie", "Suite"));
-        bookingQueue.add(new Reservation("David", "Single"));
-
-        System.out.println("Booking Requests in Arrival Order:\n");
-
-        // Display requests in queue order
-        for (Reservation request : bookingQueue) {
-            request.displayRequest();
-        }
-
-        System.out.println("\nTotal Requests in Queue: " + bookingQueue.size());
+        displayBookingRequests();
     }
 }
