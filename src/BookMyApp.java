@@ -1,73 +1,57 @@
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class BookMyApp {
-    // Abstract Room class
-    static abstract class Room {
-        private String roomType;
-        private int beds;
-        private int size;
-        private double price;
 
-        public Room(String roomType, int beds, int size, double price) {
-            this.roomType = roomType;
-            this.beds = beds;
-            this.size = size;
-            this.price = price;
+        // Centralized inventory using HashMap
+        private static HashMap<String, Integer> roomInventory = new HashMap<>();
+
+        // Initialize room types
+        public static void initializeInventory() {
+            roomInventory.put("Single", 10);
+            roomInventory.put("Double", 8);
+            roomInventory.put("Suite", 5);
         }
 
-        public void displayRoomDetails() {
-            System.out.println("Room Type : " + roomType);
-            System.out.println("Beds      : " + beds);
-            System.out.println("Size      : " + size + " sqft");
-            System.out.println("Price     : $" + price);
+        // Get availability
+        public static int getAvailability(String roomType) {
+            return roomInventory.getOrDefault(roomType, 0);
+        }
+
+        // Update availability
+        public static void updateAvailability(String roomType, int newCount) {
+            if (roomInventory.containsKey(roomType)) {
+                roomInventory.put(roomType, newCount);
+            } else {
+                System.out.println("Room type not found.");
+            }
+        }
+
+        // Display inventory
+        public static void displayInventory() {
+            System.out.println("Current Room Inventory:");
+            for (Map.Entry<String, Integer> entry : roomInventory.entrySet()) {
+                System.out.println(entry.getKey() + " : " + entry.getValue());
+            }
+        }
+
+        public static void main(String[] args) {
+
+            // Initialize inventory
+            initializeInventory();
+
+            // Display inventory
+            displayInventory();
+
+            // Check availability
+            System.out.println("\nAvailable Single Rooms: " + getAvailability("Single"));
+
+            // Update inventory
+            updateAvailability("Single", 7);
+
+            // Display updated inventory
+            System.out.println("\nUpdated Inventory:");
+            displayInventory();
         }
     }
-
-    // Single Room class
-    static class SingleRoom extends Room {
-        public SingleRoom() {
-            super("Single Room", 1, 200, 100.0);
-        }
-    }
-
-    // Double Room class
-    static class DoubleRoom extends Room {
-        public DoubleRoom() {
-            super("Double Room", 2, 350, 180.0);
-        }
-    }
-
-    // Suite Room class
-    static class SuiteRoom extends Room {
-        public SuiteRoom() {
-            super("Suite Room", 3, 500, 300.0);
-        }
-    }
-
-    public static void main(String[] args) {
-
-        System.out.println("===== Book My Stay - Room Availability =====");
-
-        // Room objects (Polymorphism)
-        Room singleRoom = new SingleRoom();
-        Room doubleRoom = new DoubleRoom();
-        Room suiteRoom = new SuiteRoom();
-
-        // Static availability variables
-        int singleAvailable = 5;
-        int doubleAvailable = 3;
-        int suiteAvailable = 2;
-
-        singleRoom.displayRoomDetails();
-        System.out.println("Available : " + singleAvailable);
-        System.out.println("--------------------------------");
-
-        doubleRoom.displayRoomDetails();
-        System.out.println("Available : " + doubleAvailable);
-        System.out.println("--------------------------------");
-
-        suiteRoom.displayRoomDetails();
-        System.out.println("Available : " + suiteAvailable);
-        System.out.println("--------------------------------");
-
-        System.out.println("Application Terminated.");
-    }
-}
